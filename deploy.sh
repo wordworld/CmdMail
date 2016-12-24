@@ -27,6 +27,12 @@ for item in ${scripts[@]} ; do
 	cp -f $curDir/$item $HOME/.$item
 done
 
+# 设置 .fetchmailrc 的权限
+chmod 700 $HOME/.${scripts[3]}
+
+# 设置邮件大小限制为100M
+# sudo postconf -e "message_size_limit = 104857600"
+
 
 # 配置账号
 function AddMailAcount()
@@ -42,6 +48,7 @@ function AddMailAcount()
 	local send_svr=$6
 	local send_pro=$7
 
+	# mutt 账号( .muttrc )
 	local mutt_cfg="macro index ,CMD \":set pop_host=\\\\\"pop://USR:PWD@SVR\\\\\"\\\\r <fetch-mail>\""
 	mutt_cfg="${mutt_cfg/CMD/$sign}"
 	mutt_cfg="${mutt_cfg/USR/$user}"
@@ -49,9 +56,10 @@ function AddMailAcount()
 	mutt_cfg="${mutt_cfg/SVR/$recv_svr}"
 	FindSetLines $HOME/.${scripts[0]} "$mutt_cfg" "$mutt_cfg"
 
-	local recv_cfg="poll SVR && protocol PROTO && user \"USR\" && password \"PWD\""
+	# fetchmail 账号( .fetchmailrc )
+	local recv_cfg="poll PROTO.SVR protocol PROTO uidl user \"USR\" password \"PWD\" keep"
 	recv_cfg=${recv_cfg/SVR/$recv_svr}
-	recv_cfg=${recv_cfg/PROTO/$recv_pro}
+	recv_cfg=${recv_cfg//PROTO/$recv_pro}
 	recv_cfg=${recv_cfg/USR/$user}
 	recv_cfg=${recv_cfg/PWD/$pass}
 	FindSetLines $HOME/.${scripts[3]} "$recv_cfg" "$recv_cfg"

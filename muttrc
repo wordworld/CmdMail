@@ -28,8 +28,6 @@ set indent_str="> "
 # 回复时不包含原邮件头
 set header=no
 
-# 发信候选字符集
-set send_charset="us-ascii:iso-8859-1:gb2312:utf-8"
 
 
 # ############################################################
@@ -39,8 +37,6 @@ set send_charset="us-ascii:iso-8859-1:gb2312:utf-8"
 # 我的收信地址
 alternates "fstone@buaa.edu.cn"
 
-# 收到的邮件，把不是 utf-8 的编码都映射到 gb2312
-charset-hook !utf-8 gb2312
 
 # ############################################################
 # 读
@@ -114,7 +110,16 @@ folder-hook ~/Mail/Trash 'bind index d delete-message'
 # ############################################################
 
 # 终端编码方式
-# set charset="gb2312"
+set charset="utf-8"
+
+# 中文附件名为乱码的问题
+set rfc2047_parameters=yes
+
+# 发信候选字符集
+set send_charset="us-ascii:iso-8859-1:gb2312:utf-8"
+
+# 收到的邮件，把不是 utf-8 的编码都映射到 gb2312
+charset-hook !utf-8 gb2312
 
 # 显示中文格式的日期等
 set locale="zh_CN"
@@ -132,7 +137,7 @@ set move=no			# 不提示将邮件从 spool 移动到 mbox
 set wait_key=yes
 
 # 编辑器
-set editor="vim"
+set editor="vim -c 'set syntax=mail ft=mail enc=utf-8'"
 
 # ############################################################
 # 账号设置
